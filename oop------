@@ -1,0 +1,62 @@
+import java.util.Scanner;
+
+public class MultiThreadedChatbot {
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.println("Welcome to the Multithreaded Chatbot!");
+        System.out.println("Type 'exit' to quit.");
+
+        while (true) {
+            System.out.print("You: ");
+            String input = scanner.nextLine();
+
+            if ("exit".equalsIgnoreCase(input)) {
+                System.out.println("Chatbot: Goodbye!");
+                break;
+            }
+
+            // Create a new thread to handle the response
+            Thread chatbotThread = new Thread(new ChatbotResponse(input));
+            chatbotThread.start();
+        }
+
+        scanner.close();
+    }
+}
+
+class ChatbotResponse implements Runnable {
+    private String userInput;
+
+    public ChatbotResponse(String userInput) {
+        this.userInput = userInput;
+    }
+
+    @Override
+    public void run() {
+        try {
+            // Simulate processing time
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        String response = generateResponse(userInput);
+        System.out.println("Chatbot: " + response);
+    }
+
+    private String generateResponse(String input) {
+        input = input.toLowerCase();
+
+        if (input.contains("hello") || input.contains("hi")) {
+            return "Hello! How can I assist you today?";
+        } else if (input.contains("how are you")) {
+            return "I'm just a bot, but I'm doing great!";
+        } else if (input.contains("bye")) {
+            return "Goodbye! Have a great day!";
+        } else {
+            return "Sorry, I didn't understand that.";
+        }
+    }
+}
